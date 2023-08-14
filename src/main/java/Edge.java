@@ -8,6 +8,7 @@ public class Edge {
     public Edge(Node n1, Node n2){
         this.node1 = n1;
         this.node2 = n2;
+        this.edgelegth = calcEdgeLength();
         addEdge(node1, node2);
     }
 
@@ -26,5 +27,9 @@ public class Edge {
     public void addEdge(Node node1, Node node2){
         node1.addEdge(this);
         node2.addEdge(this);
+    }
+
+    public Node getNode2(){
+        return this.node2;
     }
 }

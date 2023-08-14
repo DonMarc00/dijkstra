@@ -6,7 +6,7 @@ public class Node {
     private double posx;
     private double posy;
 
-    public Node(double posx, double posy){
+    public Node(double posx, double posy) {
         this.posx = posx;
         this.posy = posy;
     }
@@ -19,7 +19,15 @@ public class Node {
         return posy;
     }
 
-    public void addEdge(Edge edge){
+    public void addEdge(Edge edge) {
         edges.add(edge);
     }
+
+    public ArrayList<Edge> getEdges(){
+        return this.edges;
+    }
+
+
 }
+
+
