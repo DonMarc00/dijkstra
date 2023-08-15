@@ -6,9 +6,12 @@ public class Node {
     private double posx;
     private double posy;
 
-    public Node(double posx, double posy) {
+    private int id;
+
+    public Node(int id, double posx, double posy) {
         this.posx = posx;
         this.posy = posy;
+        this.id = id;
     }
 
     public double getPosx() {

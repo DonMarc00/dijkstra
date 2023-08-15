@@ -1,38 +1,41 @@
+import org.jetbrains.annotations.NotNull;
+
 import java.util.*;
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.util.Scanner;
 
 public class Main {
 
-    public static void main(String[] args) {
-        Node startNode = new Node(1, 1);
-        Node node2 = new Node(6, 4);
-        Node node3 = new Node(2, 3);
-        Node node4 = new Node(4, 4);
-        Node node5 = new Node(8, 8);
-
-        Edge edge12 = new Edge(startNode, node2);
-        Edge edge13 = new Edge(startNode, node3);
-        Edge edge24 = new Edge(node2, node4);
-        Edge edge34 = new Edge(node3, node4);
-        Edge edge45 = new Edge(node4, node5);
+    public static void main(String[] args) throws FileNotFoundException {
+        String filePath = "src/main/java/nodeCoordinates";
+        String edgePath = "src/main/java/edgeNodes";
+        int [][] coordinates = readCoordinates(filePath);
+        int [][] edgeNodes = readCoordinates(edgePath);
 
         ArrayList<Node> nodes = new ArrayList<Node>();
-        nodes.add(startNode);
-        nodes.add(node2);
-        nodes.add(node3);
-        nodes.add(node4);
-        nodes.add(node5);
+        int index = 0;
+        for (int[] coord:coordinates) {
+            nodes.add(new Node(index, coord[0],coord[1]));
+            index++;
+        }
+        for (int[] edge:edgeNodes) {
+            //-1 to use natural counting in configs
+            new Edge(nodes.get(edge[0]-1), nodes.get(edge[1]-1));
+        }
+
 
         PriorityQueue<PathInfo> queue = new PriorityQueue<>(Comparator.comparingDouble(PathInfo::getShortestPath));
         Map<Node, PathInfo> pathInfoMap = new HashMap<>();
 
         // Initialize the starting node
-        PathInfo startInfo = new PathInfo(startNode, 0, null);
+        PathInfo startInfo = new PathInfo(nodes.get(0), 0, null);
         queue.add(startInfo);
-        pathInfoMap.put(startNode, startInfo);
+        pathInfoMap.put(nodes.get(0), startInfo);
 
         // Initialize other nodes with infinite distance
         for (Node node : nodes) {
-            if (node != startNode) {
+            if (node != nodes.get(0)) {
                 pathInfoMap.put(node, new PathInfo(node, Double.POSITIVE_INFINITY, null));
             }
         }
@@ -62,6 +65,35 @@ public class Main {
             System.out.println(node + "  Shortest Path: " + pathInfoMap.get(node).getShortestPath() + " Previous Node: " + pathInfoMap.get(node).getPreviousNode());
         }
 
+    }
+
+    public static int[][] readCoordinates(String filePath){
+        ArrayList<int[]> tempList = new ArrayList<>();
+
+        try {
+            Scanner scanner = new Scanner(new File(filePath));
+
+            while (scanner.hasNextLine()) {
+                String line = scanner.nextLine();
+                String[] parts = line.split(" ");
+
+                int x = Integer.parseInt(parts[0]);
+                int y = Integer.parseInt(parts[1]);
+
+                tempList.add(new int[]{x, y});
+            }
+            scanner.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        }
+
+        // Convert ArrayList to 2D array
+        int[][] coordinates = new int[tempList.size()][2];
+        for (int i = 0; i < tempList.size(); i++) {
+            coordinates[i] = tempList.get(i);
+        }
+
+        return coordinates;
     }
 
 
