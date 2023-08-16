@@ -6,7 +6,7 @@ A Java implementation and visualization of the Dijkstra-Algorithm
 - [x] Datamodel
 - [x] Distance calculator
 - [x] PathInfo
-- [ ] Vizualization
+- [x] Vizualization
 - [ ] Refactoring
-- [ ] Factories
+- [ ] Make shit prettier
 
