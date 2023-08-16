@@ -2,8 +2,8 @@ public class Edge {
 
     Node node1;
     Node node2;
-
     double edgelegth;
+    boolean current = false;
 
     public Edge(Node n1, Node n2){
         this.node1 = n1;
@@ -31,5 +31,13 @@ public class Edge {
 
     public Node getNode2(){
         return this.node2;
+    }
+
+    public void setCurrent(boolean current) {
+        this.current = current;
+    }
+
+    public boolean isCurrent() {
+        return current;
     }
 }

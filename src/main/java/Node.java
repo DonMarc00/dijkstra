@@ -5,8 +5,9 @@ public class Node {
     private ArrayList<Edge> edges = new ArrayList<>();
     private double posx;
     private double posy;
-
     private int id;
+
+    private boolean visited = true;
 
     public Node(int id, double posx, double posy) {
         this.posx = posx;
@@ -26,8 +27,20 @@ public class Node {
         edges.add(edge);
     }
 
-    public ArrayList<Edge> getEdges(){
+    public ArrayList<Edge> getEdges() {
         return this.edges;
+    }
+
+    public void visit() {
+        this.visited = true;
+    }
+
+    public boolean isVisited() {
+        return visited;
+    }
+
+    public int getId(){
+        return id;
     }
 
 

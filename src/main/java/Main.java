@@ -1,5 +1,8 @@
 import org.jetbrains.annotations.NotNull;
 
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
+import java.awt.*;
 import java.util.*;
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,11 +22,13 @@ public class Main {
             nodes.add(new Node(index, coord[0],coord[1]));
             index++;
         }
+        ArrayList<Edge> edges = new ArrayList<>();
         for (int[] edge:edgeNodes) {
             //-1 to use natural counting in configs
-            new Edge(nodes.get(edge[0]-1), nodes.get(edge[1]-1));
+            edges.add(new Edge(nodes.get(edge[0]-1), nodes.get(edge[1]-1)));
         }
 
+        GraphVisualizer frame = new GraphVisualizer(nodes, edges);
 
         PriorityQueue<PathInfo> queue = new PriorityQueue<>(Comparator.comparingDouble(PathInfo::getShortestPath));
         Map<Node, PathInfo> pathInfoMap = new HashMap<>();
@@ -40,6 +45,17 @@ public class Main {
             }
         }
 
+        Object[][] data = TableDataUtility.prepareDataForTable(pathInfoMap);
+        String[] columnNames = {"Node", "Shortest Path", "Previous Node"};
+        DefaultTableModel tableModel = new DefaultTableModel(data, columnNames);
+        JTable table = new JTable(tableModel);
+        JScrollPane scrollPane = new JScrollPane(table);
+        scrollPane.setPreferredSize(new Dimension(800, 150));  // Adjust dimensions as needed
+        frame.add(scrollPane, BorderLayout.SOUTH);
+        frame.pack();
+        frame.setVisible(true);
+
+
         // Process nodes from the priority queue
         while (!queue.isEmpty()) {
             PathInfo currentInfo = queue.poll();
@@ -48,6 +64,13 @@ public class Main {
 
             // Process each edge connected to the current node
             for (Edge edge : currentNode.getEdges()) {
+                edge.setCurrent(true);  // Set the edge as current
+                frame.repaint();  // Refresh the visualization
+                try {
+                    Thread.sleep(500);  // Pause for half a second for visualization
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
                 Node neighbor = (edge.getNode2() == currentNode) ? edge.node1 : edge.getNode2();
                 double newDistance = currentDistance + edge.getEdgeLegth();
 
@@ -58,7 +81,23 @@ public class Main {
                     neighborInfo.setPreviousNode(currentNode);
                     queue.add(neighborInfo); // Re-add to the queue to reprocess
                 }
+                edge.setCurrent(false);
             }
+
+            currentNode.visit();
+            // Update the data
+            data = TableDataUtility.prepareDataForTable(pathInfoMap);
+
+// Update the table model
+            tableModel.setDataVector(data, columnNames);
+
+// Optional: Add a delay to visualize the changes more clearly
+            try {
+                Thread.sleep(500);  // Pause for half a second
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+            frame.repaint();
         }
         for (Node node: pathInfoMap.keySet()
              ) {
