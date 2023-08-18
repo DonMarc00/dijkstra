@@ -45,8 +45,8 @@ public class GraphPane extends JPanel {
                 g2d.setColor(Color.BLUE);
             }
             g2d.fillOval((int) node.getPosx() - 15, (int) node.getPosy() - 15, 30, 30);
-            g2d.setColor(Color.WHITE);
-            g2d.drawString(String.valueOf(node.getPosx()) + "," + String.valueOf(node.getPosy()), (int) node.getPosx() - 10, (int) node.getPosy() + 5);
+            g2d.setColor(Color.BLACK);
+            g2d.drawString("Node " + node.getId() + "|" + String.valueOf(node.getPosx()) + "," + String.valueOf(node.getPosy()), (int) node.getPosx() - 10, (int) node.getPosy() + 5);
         }
 
     }

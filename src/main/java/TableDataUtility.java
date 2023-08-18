@@ -10,9 +10,9 @@ public class TableDataUtility {
         int index = 0;
         for (Node node : sortedNodes) {
             PathInfo info = pathInfoMap.get(node);
-            data[index][0] = node.toString();
+            data[index][0] = "Node " + node.getId();
             data[index][1] = info.getShortestPath();
-            data[index][2] = (info.getPreviousNode() != null) ? info.getPreviousNode().toString() : "None";
+            data[index][2] = (info.getPreviousNode() != null) ? "Node " + info.getPreviousNode().getId() : "None";
             index++;
         }
         return data;
